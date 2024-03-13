@@ -3,8 +3,7 @@ import { GetClient } from "../DbClient/MongoClient";
 
 export async function GetBikerOrder(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
 
-    const bikerId = request.query.get('bikerId');
-    console.log('bikerId:', bikerId);
+    const bikerId =  request.params.bikerId;
     if (!bikerId) {
         return { status: 400, body: 'bikerId query parameter is required' };
     }
@@ -19,6 +18,7 @@ export async function GetBikerOrder(request: HttpRequest, context: InvocationCon
 
 app.http('GetDeliveryRequest', {
     methods: ['GET'],
+    route: 'BikerOrder/{bikerId}',
     authLevel: 'anonymous',
     handler: GetBikerOrder
 });
