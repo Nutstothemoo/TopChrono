@@ -1,4 +1,4 @@
-### Azure Serverless Delivery Order Management Application
+# Azure Serverless Delivery Order Management Application
 
 This Serverless application is designed to manage delivery orders and allows delivery personnel to view their orders using a biker ID.
 
