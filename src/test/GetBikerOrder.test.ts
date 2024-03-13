@@ -1,13 +1,11 @@
-import { HttpRequest, InvocationContext } from "@azure/functions";
-import { GetBikerOrder } from "../functions/GetBikerOrder";
-import { Blob } from "buffer";
-import { FormData } from "undici";
+import { GetOrderByBikerId } from "../functions/GetOrderByBikerId";
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 // Mock pour HttpRequest et InvocationContext
 const mockHttpRequest: any = {
-    query: new URLSearchParams('biker123'),
+    params: { bikerId: "biker123" },
     method: "GET",
-    url: "http://localhost:7071/api/GetBikerOrder?bikerId=biker123",
 };
 
 const mockInvocationContext: any = {
@@ -38,17 +36,16 @@ const mockInvocationContext: any = {
 
 describe('GetBikerOrder function', () => {
     it('should return a valid response when bikerId is provided', async () => {
-        const response = await GetBikerOrder(mockHttpRequest, mockInvocationContext);
+        const response = await GetOrderByBikerId(mockHttpRequest, mockInvocationContext);
         expect(response.status).toBe(200);
         expect(response.body).toBeDefined();
     });
 
     it('should return a 400 error when bikerId is missing', async () => {
         const requestWithoutBikerId: any = { 
-            query: new URLSearchParams(''), 
-            url: "http://localhost:7071/api/GetBikerOrder?bikerId=",
+            params: { bikerId: "" },
         };
-        const response = await GetBikerOrder(requestWithoutBikerId, mockInvocationContext);
+        const response = await GetOrderByBikerId(requestWithoutBikerId, mockInvocationContext);
         expect(response.status).toBe(400);
         expect(response.body).toBe('bikerId query parameter is required');
     });

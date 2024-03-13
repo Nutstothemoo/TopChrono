@@ -1,7 +1,7 @@
 import { app, HttpRequest, HttpResponseInit, InvocationContext } from "@azure/functions";
-import { GetClient } from "../DbClient/MongoClient";
+import { GetClient } from "../models/MongoClient";
 
-export async function GetBikerOrder(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
+export async function GetOrderByBikerId(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
 
     const bikerId =  request.params.bikerId;
     if (!bikerId) {
@@ -12,13 +12,13 @@ export async function GetBikerOrder(request: HttpRequest, context: InvocationCon
     const db = client.db("serverless");
     const orders = db.collection('bikerOrder');
 
-    const bikerOrders = await orders.find({ bikerId }).toArray();
-
+    const bikerOrders = await orders.find({ bikerId });
+    console.log("bikerOrders: ", bikerOrders);
     return { body: JSON.stringify(bikerOrders) };};
 
-app.http('GetDeliveryRequest', {
+app.http('GetOrderByBikerId', {
     methods: ['GET'],
     route: 'BikerOrder/{bikerId}',
     authLevel: 'anonymous',
-    handler: GetBikerOrder
+    handler:GetOrderByBikerId
 });
